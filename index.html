@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Tính điểm cùng PA Cent 1.0</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" href="./TLMN52la.css" />
+        <script src="./TLMN52la.js"></script>
+        <script src="./zxing.js"></script>
+    </head>
+    <body onload="thebodyonload()">
+        <div id="ten1"></div>
+        <div id="ten2"></div>
+        <div id="ten3"></div>
+        <div id="ten4"></div>
+        
+        <div id="div0">
+            <input id="input1"/>
+            <input id="input2"/>
+            <input id="input3"/>
+            <input id="input4"/>
+            <input id="input5" type="number"/>
+            <input id="input6" type="number"/>
+            <input id="input7" type="number"/>
+            <input id="input8" type="number"/>
+        </div>
+        <div id="div0_0">Ván: 1</div>
+        <div id="div0_1"></div>
+        <div id="div0_2"></div>
+        <div id="div0_3"></div>
+        <div id="div0_4">NEXT</div>
+        <div id="div1"></div>
+        <div id="div2">Bảng Xếp Hạng</div>
+        <div id="div3_1">Top</div>
+        <div id="div3_2">Tên</div>
+        <div id="div3_3">Điểm</div>
+        <div id="div4_1">
+            <img style="width:41px;height:49px;position:absolute;top:2.5px;left:2.5px" src='./Top1.png' />
+        </div>
+        <div id="div4_2"></div>
+        <div id="div4_3"></div>
+        <div id="div5_1">
+            <img style="width:35.3px;height:42px;position:absolute;top:2.8px;left:2.35px" src='./Top2.png' />
+        </div>
+        <div id="div5_2"></div>
+        <div id="div5_3"></div>
+        <div id="div6_1">
+            <img style="width:39px;height:52px;position:absolute;top:2.5px;left:1px" src='./Top3.png' />
+        </div>
+        <div id="div6_2"></div>
+        <div id="div6_3"></div>
+        <div id="div7_1">
+            <img style="width:38px;height:41px;position:absolute;top:4px;left:1px" src='./Top4.png' />
+        </div>
+        <div id="div7_2"></div>
+        <div id="div7_3"></div>
+        
+        <div id="div8">Bảng thống kê</div>
+        <div id="div8_1">Tên</div>
+        <div id="div8_2">Nhất</div>
+        <div id="div8_3">Nhì</div>
+        <div id="div8_4">Ba</div>
+        <div id="div8_5">Bét</div>
+        <div id="div9_1"></div>
+        <div id="div9_2"></div>
+        <div id="div9_3"></div>
+        <div id="div9_4"></div>
+        <div id="div9_5"></div>
+        <div id="div10_1"></div>
+        <div id="div10_2"></div>
+        <div id="div10_3"></div>
+        <div id="div10_4"></div>
+        <div id="div10_5"></div>
+        <div id="div11_1"></div>
+        <div id="div11_2"></div>
+        <div id="div11_3"></div>
+        <div id="div11_4"></div>
+        <div id="div11_5"></div>
+        <div id="div12_1"></div>
+        <div id="div12_2"></div>
+        <div id="div12_3"></div>
+        <div id="div12_4"></div>
+        <div id="div12_5"></div>
+        
+        <div id="div13_0">Ván:</div>
+        <div id="div13_1"></div>
+        <div id="div13_2"></div>
+        <div id="div13_3"></div>
+        <div id="div13_4"></div>
+        <div id="div14">
+            <table id="tab1" border="1" cellspacing="0">
+            </table>
+        </div>
+        <div id="div15">Banner Hỗ trợ</div>
+        <div id="div16">Password:
+            <input id="input9" type="password"/>
+            <br/><br/>Mã hỗ trợ:
+            <input id="input10" type="number" />
+        </div>
+        <div id="div17">Hủy</div>
+        
+        <div id="popup">
+            <div id="popup-content">
+              <div id="close" onclick="hidePopup()">&times;</div>
+              <label class="iconlabaido">&hearts;</label>
+              <label class="iconlabaiden">&clubs;</label>
+              <h2 style="display: inline">Thông báo </h2>
+              <label class="iconlabaido">&diams;</label>
+              <label class="iconlabaiden">&spades;</label>
+              <p id="noidungthongbao">Đây là nội dung của thông báo.</p>
+            </div>
+        </div>
+        
+        <div class="conf-popup">
+            <div class="conf-popup-content">
+              <h2>Thông báo!</h2>
+              <p id="conf-popup-noidungthongbao">Bạn có muốn khôi phục dữ liệu cũ được lưu lúc: </p>
+              <div class="buttons">
+                <button id="restore">Khôi phục</button>
+                <button id="reset">Tạo mới</button>
+              </div>
+            </div>
+        </div>
+        <textarea id="PAspeak"></textarea>
+        <audio id="audio" style="visibility: hidden;">
+            <source id="audiosrc" src="./khoiphuchaykhong.mp3" type="audio/mpeg"/>
+        </audio>
+        
+        <script>
+            var cachnhap=0,speech=true,tieptucnghe=true,PAspeak=document.getElementById("PAspeak");
+            let intervalId;
+            const codeReader = new ZXing.BrowserQRCodeReader();
+            var poinscan=3,kqscan=0;
+            var beepsound = new Audio("./beepsound.mp3");
+            
+            window.SpeechRecognition=window.webkitSpeechRecognition;
+            const recognition=new SpeechRecognition();
+            recognition.lang = 'vi-VN';
+            recognition.continuous = false;
+            recognition.interimResults=true;
+            
+            
+            recognition.onend= function (){
+                var yeucau=PAspeak.innerHTML;yeucau=yeucau.toLowerCase();
+                //kiểm tra các câu lệnh PA
+                if(van==1&&yeucau.search("khôi phục")!=-1)
+                {
+                    playaudio("tienhanhkhoiphuc");
+                    khoiphucdulieu();
+                    document.querySelector('.conf-popup').style.display = "none";
+                }
+                else if(van==1&&yeucau.search("khởi tạo dữ liệu mới")!=-1)
+                {
+                    playaudio("tienhanhtaomoi");
+                    xoadulieulocalstorage();
+                    document.querySelector('.conf-popup').style.display = "none";
+                }
+                else if((yeucau.search("đóng thông báo")!=-1)||(yeucau.search("tắt thông báo")!=-1))
+                {var rnd=Math.floor(Math.random()*10);
+                    if(rnd<4)
+                    {
+                        playaudio("toiselamtheoyeucaucuaban");
+                    }
+                    else if(rnd>6)
+                    {
+                        playaudio("vangtoidanghero");
+                    }
+                    else
+                    {
+                        playaudio("dongthongbao");
+                    }
+                    hidePopup();
+                }
+                else if(yeucau.search("quét mã")!=-1){
+                    ScanQR();
+                }
+                else if(yeucau.search("tính điểm")!=-1)
+                {var rnd=Math.floor(Math.random()*10);
+                    if(rnd<2)
+                    {
+                        playaudio("daro");
+                    }
+                    else if(rnd>=2&&rnd<4)
+                    {
+                        playaudio("vangtoidanghero");
+                    }
+                    else if(rnd>6)
+                    {
+                        playaudio("tinhdiemvachuyensangvantieptheo");
+                    }
+                    else
+                    {
+                        playaudio("dahoantattinhtoanvachuyensangvanmoi");
+                    }
+                    cachnhap=0;
+                    tinhdiem();
+                }
+                else if(yeucau.search("nhập điểm tất cả")!=-1){
+                    cachnhap=1;
+                }
+                else if((yeucau.search("nhập điểm từng người")!=-1)||(yeucau.search("nhập điểm cá nhân")!=-1)){
+                    cachnhap=0;
+                }
+                else if((yeucau.search("nhập điểm phụ")!=-1)||(yeucau.search("nhập điểm bổ sung")!=-1)){
+                    cachnhap=2;
+                }
+                else if(cachnhap==0&&yeucau.search(a[0][0])!=-1&&yeucau.search("điểm")!=-1){
+                    yeucau=xulylaydiem(yeucau);
+                    if(Number.isNaN(yeucau) == false){
+                        document.getElementById("input1").value=yeucau;
+                    }
+                }
+                else if(cachnhap==0&&yeucau.search(a[1][0])!=-1&&yeucau.search("điểm")!=-1){
+                    yeucau=xulylaydiem(yeucau);
+                    if(Number.isNaN(yeucau) == false){
+                        document.getElementById("input2").value=yeucau;
+                    }
+                }
+                else if(cachnhap==0&&yeucau.search(a[2][0])!=-1&&yeucau.search("điểm")!=-1){
+                    yeucau=xulylaydiem(yeucau);
+                    if(Number.isNaN(yeucau) == false){
+                        document.getElementById("input3").value=yeucau;
+                    }
+                }
+                else if(cachnhap==0&&yeucau.search(a[3][0])!=-1&&yeucau.search("điểm")!=-1){
+                    yeucau=xulylaydiem(yeucau);
+                    if(Number.isNaN(yeucau) == false){
+                        document.getElementById("input4").value=yeucau;
+                    }
+                }
+                //
+                else if(cachnhap==2&&yeucau.search(a[0][0])!=-1&&yeucau.search("điểm")!=-1){
+                    yeucau=xulylaydiem(yeucau);
+                    if(Number.isNaN(yeucau) == false){
+                        document.getElementById("input5").value=yeucau;
+                    }
+                }
+                else if(cachnhap==2&&yeucau.search(a[1][0])!=-1&&yeucau.search("điểm")!=-1){
+                    yeucau=xulylaydiem(yeucau);
+                    if(Number.isNaN(yeucau) == false){
+                        document.getElementById("input6").value=yeucau;
+                    }
+                }
+                else if(cachnhap==2&&yeucau.search(a[2][0])!=-1&&yeucau.search("điểm")!=-1){
+                    yeucau=xulylaydiem(yeucau);
+                    if(Number.isNaN(yeucau) == false){
+                        document.getElementById("input7").value=yeucau;
+                    }
+                }
+                else if(cachnhap==2&&yeucau.search(a[3][0])!=-1&&yeucau.search("điểm")!=-1){
+                    yeucau=xulylaydiem(yeucau);
+                    if(Number.isNaN(yeucau) == false){
+                        document.getElementById("input8").value=yeucau;
+                    }
+                }
+                //
+                else if(cachnhap==1){
+                    yeucau=xulylaydiem(yeucau);
+                    if(Number.isNaN(yeucau) == false&& parseInt(yeucau)>0){
+                        document.getElementById("input4").value=yeucau[yeucau.length-1];
+                        yeucau.length-2>=0?document.getElementById("input3").value=yeucau[yeucau.length-2]:yeucau=yeucau;
+                        yeucau.length-3>=0?document.getElementById("input2").value=yeucau[yeucau.length-3]:yeucau=yeucau;
+                        yeucau.length-4>=0?document.getElementById("input1").value=yeucau[yeucau.length-4]:yeucau=yeucau;
+                    }
+                }
+                //
+                if(tieptucnghe){
+                    listening();
+                }
+            }
+            recognition.addEventListener('result',e=>{
+                const transcript= Array.from(e.results)
+                .map(result=>result[0])
+                .map(result=>result.transcript)
+
+                PAspeak.innerHTML=transcript; 
+            });
+            /*recognition.onresult = function(event) {
+                var transcript = event.results[0][0].transcript;
+                PAspeak.innerHTML=transcript;
+            }*/
+            
+            document.onkeyup=function(event){
+                if(event.code=='Space'&& event.shiftKey){
+                    if(speech==true){
+                        tieptucnghe=true;
+                        setNewInterval();
+                        recognition.start();
+                    }
+                }
+                if(event.code=='Space'&& event.ctrlKey){
+                    clearInterval(intervalId);
+                    tieptucnghe=false;
+                    recognition.stop();
+                    PAspeak.innerHTML="";
+                }
+                if(event.code=='KeyC'&& event.altKey){
+                    ScanQR();
+                }
+                if(event.code=='KeyS'&& event.altKey){
+                    codeReader.reset(); // tắt camera
+                }
+            }
+            function listening(){
+                if(speech==true){
+                    PAspeak.innerHTML="";
+                    recognition.start();
+                }
+            }
+            function setNewInterval(){
+                intervalId=setInterval(function (){
+                    tieptucnghe=false;
+                    recognition.stop();
+                    setTimeout(function (){
+                        tieptucnghe=true;
+                        listening();
+                    },2000);
+                }, 45000);
+            }
+            
+            function playaudio(src){
+                var audioPA=document.getElementById("audiosrc");
+                audioPA.src="./"+src+".mp3";
+                audioPA=document.getElementById("audio");
+                audioPA.load();audioPA.play();
+            }
+            function xulylaydiem(diem){
+                diem = diem.replace(/một/g, '1');
+                diem = diem.replace(/hai/g, '2');
+                diem = diem.replace(/ba/g, '3');
+                diem = diem.replace(/bốn/g, '4');
+                diem = diem.replace(/âm/g, '-');
+                diem = diem.replace(/trừ/g, '-');
+                diem = diem.replace(/[^\d-]/g, '');
+                return diem;
+            }
+            function ScanQR(){
+                codeReader.decodeFromInputVideoDevice().then(result => {
+                    beepsound.play();kqscan = result.text;
+                    if(kqscan==1)
+                    {
+                        if(document.getElementById('input1').value=="")
+                            document.getElementById('input1').value=poinscan;
+                        else
+                            poinscan++;
+                    }
+                    else if(kqscan==2)
+                    {
+                        if(document.getElementById('input2').value=="")
+                            document.getElementById('input2').value=poinscan;
+                        else
+                            poinscan++;
+                    }
+                    else if(kqscan==3)
+                    {
+                        if(document.getElementById('input3').value=="")
+                            document.getElementById('input3').value=poinscan;
+                        else
+                            poinscan++;
+                    }
+                    else if(kqscan==4)
+                    {
+                        if(document.getElementById('input4').value=="")
+                            document.getElementById('input4').value=poinscan;
+                        else
+                            poinscan++;
+                    }
+                    poinscan--;
+                    if(poinscan==0)
+                    {
+                        kqscan=0;poinscan=3;tinhdiem();codeReader.reset();
+                    }
+                    else
+                    {
+                        kqscan=0;ScanQR();
+                    }
+                }).catch(err => {
+                    if(err.toString().localeCompare("R: Video stream has ended before any code could be detected.")==0)
+                    {kqscan=0;poinscan=3;}
+                    else
+                        ScanQR();
+                });
+            }
+        </script>
+        
+    </body>
+</html>
+
